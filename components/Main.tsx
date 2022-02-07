@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { fetcher } from 'utils/fetcher';
-import Editor from './Editor';
+import Editor from './editor/Editor';
 
 function Main() {
   const [apiData, setApiData] = useState([]);
@@ -15,7 +15,7 @@ function Main() {
   }, []);
   return (
     <MainContainer>
-      <Editor />
+      <Editor apiData={apiData} />
     </MainContainer>
   );
 }
