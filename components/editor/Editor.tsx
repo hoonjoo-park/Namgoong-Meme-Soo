@@ -1,19 +1,22 @@
+import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { API_DATA } from 'types';
+import { API_DATA, SINGLE_API_DATA } from 'types';
 import EditorForm from './EditorForm';
 import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
 
 interface Props {
   apiData: API_DATA;
+  currentMeme: SINGLE_API_DATA | null;
+  setCurrentMeme: Dispatch<SetStateAction<SINGLE_API_DATA | null>>;
 }
 
-function Editor({ apiData }: Props) {
+function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
   return (
     <EditorBox>
-      <EditorImage />
+      <EditorImage currentMeme={currentMeme} />
       <RightBox>
-        <EditorMemeList apiData={apiData} />
+        <EditorMemeList apiData={apiData} setCurrentMeme={setCurrentMeme} />
         <EditorForm />
       </RightBox>
     </EditorBox>

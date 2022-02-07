@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { SINGLE_API_DATA } from 'types';
 import { fetcher } from 'utils/fetcher';
 import Editor from './editor/Editor';
 
 function Main() {
   const [apiData, setApiData] = useState([]);
+  const [currentMeme, setCurrentMeme] = useState<SINGLE_API_DATA | null>(null);
   useEffect(() => {
     (async () => {
       const {
@@ -15,7 +17,11 @@ function Main() {
   }, []);
   return (
     <MainContainer>
-      <Editor apiData={apiData} />
+      <Editor
+        apiData={apiData}
+        currentMeme={currentMeme}
+        setCurrentMeme={setCurrentMeme}
+      />
     </MainContainer>
   );
 }

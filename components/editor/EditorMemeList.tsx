@@ -1,17 +1,19 @@
 import Meme from 'components/Meme';
+import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { API_DATA } from 'types';
+import { API_DATA, SINGLE_API_DATA } from 'types';
 
 interface Props {
   apiData: API_DATA;
+  setCurrentMeme: Dispatch<SetStateAction<SINGLE_API_DATA | null>>;
 }
 
-function EditorMemeList({ apiData }: Props) {
+function EditorMemeList({ apiData, setCurrentMeme }: Props) {
   return (
     <MemeListContainer>
       <MemeContainer>
         {apiData.map((data) => (
-          <Meme key={data.id} id={data.id} meme={data.url} />
+          <Meme key={data.id} meme={data} setCurrentMeme={setCurrentMeme} />
         ))}
       </MemeContainer>
     </MemeListContainer>
