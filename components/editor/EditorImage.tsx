@@ -1,3 +1,4 @@
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { API_DATA, SINGLE_API_DATA, TEXT_TYPE } from 'types';
 
@@ -5,14 +6,87 @@ interface Props {
   currentMeme: SINGLE_API_DATA | null;
   text: TEXT_TYPE;
 }
+interface Position {
+  top: { x: number; y: number };
+  middle: { x: number; y: number };
+  bottom: { x: number; y: number };
+}
 
 function EditorImage({ currentMeme, text }: Props) {
+  const [position, setPosition] = useState<Position>({
+    top: { x: 0, y: 0 },
+    middle: { x: 0, y: 0 },
+    bottom: { x: 0, y: 0 },
+  });
+  const [startX, setStartX] = useState(0);
+  const [startY, setStartY] = useState(0);
+  const [startTop, setStartTop] = useState(0);
+  const [startLeft, setStartLeft] = useState(0);
+  const [isDown, setIsDown] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    setIsDown(true);
+    setStartX(e.pageX);
+    setStartY(e.pageY);
+    setStartTop(e.currentTarget.offsetTop);
+    setStartLeft(e.currentTarget.offsetLeft);
+  };
+
+  const handleMouseUp = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const toMoveTop = e.pageY - startY + startTop;
+    const toMoveLeft = e.pageX - startX + startLeft;
+    if (e.currentTarget.id === 'topText')
+      return setPosition({ ...position, top: { x: toMoveLeft, y: toMoveTop } });
+    if (e.currentTarget.id === 'middleText')
+      return setPosition({
+        ...position,
+        middle: { x: toMoveLeft, y: toMoveTop },
+      });
+    if (e.currentTarget.id === 'bottomText')
+      return setPosition({
+        ...position,
+        bottom: { x: toMoveLeft, y: toMoveTop },
+      });
+  };
+
   return currentMeme ? (
     <ImgBox>
-      <Img src={currentMeme!.url} alt='meme' />
-      <ImageText id='topText'>{text.top}</ImageText>
-      <ImageText id='middleText'>{text.middle}</ImageText>
-      <ImageText id='bottomText'>{text.bottom}</ImageText>
+      <Img src={currentMeme!.url} alt='meme' draggable='false' />
+      <ImageText
+        id='topText'
+        onMouseDown={(e) => handleMouseDown(e)}
+        onMouseUp={handleMouseUp}
+        onMouseMove={(e) => handleMouseMove(e)}
+        onMouseLeave={handleMouseUp}
+        position={position}
+      >
+        {text.top}
+      </ImageText>
+      <ImageText
+        id='middleText'
+        onMouseDown={(e) => handleMouseDown(e)}
+        onMouseUp={handleMouseUp}
+        onMouseMove={(e) => handleMouseMove(e)}
+        position={position}
+      >
+        {text.middle}
+      </ImageText>
+      <ImageText
+        id='bottomText'
+        onMouseDown={(e) => handleMouseDown(e)}
+        onMouseUp={handleMouseUp}
+        onMouseMove={(e) => handleMouseMove(e)}
+        position={position}
+      >
+        {text.bottom}
+      </ImageText>
     </ImgBox>
   ) : (
     <NoImage>
@@ -50,7 +124,7 @@ const NoImage = styled.div`
   font-weight: 700;
 `;
 
-const ImageText = styled.div`
+const ImageText = styled.div<{ position: Position }>`
   position: absolute;
   width: fit-content;
   font-size: 2rem;
@@ -62,13 +136,21 @@ const ImageText = styled.div`
   user-select: none;
   cursor: pointer;
   &#topText {
-    top: 10%;
+    top: ${(props) =>
+      props.position.top.y === 0 ? '10%' : `${props.position.top.y}px`};
+    left: ${(props) =>
+      props.position.top.x === 0 ? '50%' : `${props.position.top.x}px`};
   }
   &#middleText {
-    top: 50%;
-    transform: translate(-50%);
+    top: ${(props) =>
+      props.position.middle.y === 0 ? '50%' : props.position.middle.y};
+    left: ${(props) =>
+      props.position.middle.x === 0 ? '50%' : props.position.middle.x};
   }
   &#bottomText {
-    bottom: 10%;
+    top: ${(props) =>
+      props.position.bottom.y === 0 ? '90%' : props.position.bottom.y};
+    left: ${(props) =>
+      props.position.bottom.x === 0 ? '50%' : props.position.bottom.x};
   }
 `;
