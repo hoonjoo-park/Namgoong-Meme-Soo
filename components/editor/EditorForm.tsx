@@ -1,22 +1,54 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
+import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
 
-function EditorForm() {
+interface Props {
+  currentMeme: SINGLE_API_DATA | null;
+  text: TEXT_TYPE;
+  setText: Dispatch<SetStateAction<TEXT_TYPE>>;
+}
+
+function EditorForm({ currentMeme, text, setText }: Props) {
+  const handleInput = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+    type: string
+  ) => {
+    if (type === 'top') return setText({ ...text, top: e.currentTarget.value });
+    if (type === 'middle')
+      return setText({ ...text, middle: e.currentTarget.value });
+    if (type === 'bottom')
+      return setText({ ...text, bottom: e.currentTarget.value });
+  };
   return (
     <Form>
       <MemeInput
         id='topInput'
         type='text'
         placeholder='상단 메시지를 입력해주세요'
+        disabled={currentMeme === null && true}
+        value={text.top}
+        onChange={(e) => handleInput(e, 'top')}
+        onKeyUp={(e) => handleInput(e, 'top')}
       />
       <MemeInput
         id='middleInput'
         type='text'
         placeholder='중앙 메시지를 입력해주세요'
+        disabled={currentMeme === null && true}
+        value={text.middle}
+        onChange={(e) => handleInput(e, 'middle')}
+        onKeyUp={(e) => handleInput(e, 'middle')}
       />
       <MemeInput
         id='bottomInput'
         type='text'
         placeholder='하단 메시지를 입력해주세요'
+        disabled={currentMeme === null && true}
+        value={text.bottom}
+        onChange={(e) => handleInput(e, 'bottom')}
+        onKeyUp={(e) => handleInput(e, 'bottom')}
       />
       <CreateButton type='submit' value='이미지 생성' />
     </Form>
@@ -53,4 +85,5 @@ const CreateButton = styled.input`
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 700;
+  cursor: pointer;
 `;

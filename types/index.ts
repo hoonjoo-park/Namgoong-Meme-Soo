@@ -15,3 +15,9 @@ export type SINGLE_API_DATA = {
   name: string;
   url: string;
 };
+
+export type TEXT_TYPE = {
+  top: string;
+  middle: string;
+  bottom: string;
+};

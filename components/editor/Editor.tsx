@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { API_DATA, SINGLE_API_DATA } from 'types';
+import { API_DATA, SINGLE_API_DATA, TEXT_TYPE } from 'types';
 import EditorForm from './EditorForm';
 import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
@@ -12,12 +12,20 @@ interface Props {
 }
 
 function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
+  const [text, setText] = useState<TEXT_TYPE>({
+    top: '',
+    middle: '',
+    bottom: '',
+  });
+  useEffect(() => {
+    setText({ top: '', middle: '', bottom: '' });
+  }, [currentMeme]);
   return (
     <EditorBox>
-      <EditorImage currentMeme={currentMeme} />
+      <EditorImage currentMeme={currentMeme} text={text} />
       <RightBox>
         <EditorMemeList apiData={apiData} setCurrentMeme={setCurrentMeme} />
-        <EditorForm />
+        <EditorForm currentMeme={currentMeme} text={text} setText={setText} />
       </RightBox>
     </EditorBox>
   );
