@@ -1,3 +1,4 @@
+import { PaletteBox } from 'components/palette/PaletteBox';
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
@@ -6,9 +7,11 @@ interface Props {
   currentMeme: SINGLE_API_DATA | null;
   text: TEXT_TYPE;
   setText: Dispatch<SetStateAction<TEXT_TYPE>>;
+  color: string;
+  setColor: Dispatch<SetStateAction<string>>;
 }
 
-function EditorForm({ currentMeme, text, setText }: Props) {
+function EditorForm({ currentMeme, text, setText, color, setColor }: Props) {
   const handleInput = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -21,8 +24,15 @@ function EditorForm({ currentMeme, text, setText }: Props) {
     if (type === 'bottom')
       return setText({ ...text, bottom: e.currentTarget.value });
   };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    return;
+  };
+
   return (
-    <Form>
+    <Form onSubmit={(e) => handleSubmit(e)}>
+      <PaletteBox color={color} setColor={setColor} />
       <MemeInput
         id='topInput'
         type='text'

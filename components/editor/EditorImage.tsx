@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import { API_DATA, SINGLE_API_DATA, TEXT_TYPE } from 'types';
-
+import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
 interface Props {
   currentMeme: SINGLE_API_DATA | null;
   text: TEXT_TYPE;
+  color: string;
 }
 
-function EditorImage({ currentMeme, text }: Props) {
+function EditorImage({ currentMeme, text, color }: Props) {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
   const [startTop, setStartTop] = useState(0);
@@ -52,9 +52,10 @@ function EditorImage({ currentMeme, text }: Props) {
       return;
     }
   };
+  console.log(color);
 
   return currentMeme ? (
-    <ImgBox>
+    <ImgBox color={color}>
       <Img src={currentMeme!.url} alt='meme' draggable='false' />
       <ImageText
         id='topText'
@@ -94,12 +95,15 @@ function EditorImage({ currentMeme, text }: Props) {
 
 export default EditorImage;
 
-const ImgBox = styled.div`
+const ImgBox = styled.div<{ color: string }>`
   position: relative;
   flex-shrink: 0;
   width: 32rem;
   border-radius: 5px;
   margin-right: 1rem;
+  & * {
+    color: ${(props) => props.color};
+  }
 `;
 
 const Img = styled.img`
@@ -129,7 +133,6 @@ const ImageText = styled.div`
   transform: translateX(-50%);
   font-size: 2rem;
   font-weight: 900;
-  color: #fff;
   text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
   user-select: none;
   cursor: pointer;

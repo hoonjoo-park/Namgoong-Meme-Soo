@@ -17,15 +17,23 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
     middle: '',
     bottom: '',
   });
+  const [color, setColor] = useState<string>('#000000');
+
   useEffect(() => {
     setText({ top: '', middle: '', bottom: '' });
   }, [currentMeme]);
   return (
     <EditorBox>
-      <EditorImage currentMeme={currentMeme} text={text} />
+      <EditorImage currentMeme={currentMeme} text={text} color={color} />
       <RightBox>
         <EditorMemeList apiData={apiData} setCurrentMeme={setCurrentMeme} />
-        <EditorForm currentMeme={currentMeme} text={text} setText={setText} />
+        <EditorForm
+          currentMeme={currentMeme}
+          text={text}
+          setText={setText}
+          color={color}
+          setColor={setColor}
+        />
       </RightBox>
     </EditorBox>
   );

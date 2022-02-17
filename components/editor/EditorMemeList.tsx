@@ -1,4 +1,4 @@
-import Meme from '@/components/editor/Meme';
+import Meme from 'components/editor/Meme';
 import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { API_DATA, SINGLE_API_DATA } from 'types';
