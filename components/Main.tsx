@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { SINGLE_API_DATA } from 'types';
 import { fetcher } from 'utils/fetcher';
 import Editor from 'components/editor/Editor';

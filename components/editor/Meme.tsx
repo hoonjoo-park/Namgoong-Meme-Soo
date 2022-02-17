@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { API_DATA, SINGLE_API_DATA } from 'types';
 
 interface Props {

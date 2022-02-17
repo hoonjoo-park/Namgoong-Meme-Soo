@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 interface Props {
   color: string;

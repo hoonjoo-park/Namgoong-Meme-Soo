@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { API_DATA, SINGLE_API_DATA, TEXT_TYPE } from 'types';
 import EditorForm from './EditorForm';
 import EditorImage from './EditorImage';

@@ -1,6 +1,6 @@
 import { PaletteBox } from 'components/palette/PaletteBox';
 import React, { Dispatch, SetStateAction } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
 
 interface Props {

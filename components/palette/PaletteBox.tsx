@@ -1,6 +1,6 @@
 import { COLOR_PALETTE } from 'constants/';
 import React, { Dispatch, SetStateAction } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { PaletteColor } from './PaletteColor';
 
 interface Props {

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
 interface Props {
   currentMeme: SINGLE_API_DATA | null;

@@ -1,30 +1,27 @@
-import Document, { DocumentContext } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-export default class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
-
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
-        });
-
-      const initialProps = await Document.getInitialProps(ctx);
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
+class MyDocument extends Document {
+  render() {
+    return (
+      <Html>
+        <Head>
+          <meta name='og:type' content='website' />
+          <meta name='og:title' content='Meme-Generator' />
+          <meta
+            name='og:image'
+            content='https://p4.wallpaperbetter.com/wallpaper/343/333/198/feelsbadman-memes-pepe-meme-wallpaper-preview.jpg'
+          />
+          <meta name='og:description' content='Make your own Meme!' />
+          <meta name='description' content='Make youre own Meme!' />
+          <link rel='icon' href='/favicon.ico' />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
   }
 }
+
+export default MyDocument;
