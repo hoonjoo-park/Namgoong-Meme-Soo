@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SINGLE_API_DATA } from 'types';
 import { fetcher } from 'utils/fetcher';
-import Editor from './editor/Editor';
+import Editor from 'components/editor/Editor';
 
 function Main() {
   const [apiData, setApiData] = useState([]);

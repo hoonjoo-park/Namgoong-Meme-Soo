@@ -6,23 +6,17 @@ interface Props {
   currentMeme: SINGLE_API_DATA | null;
   text: TEXT_TYPE;
 }
-interface Position {
-  top: { x: number; y: number };
-  middle: { x: number; y: number };
-  bottom: { x: number; y: number };
-}
 
 function EditorImage({ currentMeme, text }: Props) {
-  const [position, setPosition] = useState<Position>({
-    top: { x: 0, y: 0 },
-    middle: { x: 0, y: 0 },
-    bottom: { x: 0, y: 0 },
-  });
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
   const [startTop, setStartTop] = useState(0);
   const [startLeft, setStartLeft] = useState(0);
   const [isDown, setIsDown] = useState(false);
+
+  const topRef = useRef<HTMLDivElement>(null);
+  const middleRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -42,18 +36,21 @@ function EditorImage({ currentMeme, text }: Props) {
     e.preventDefault();
     const toMoveTop = e.pageY - startY + startTop;
     const toMoveLeft = e.pageX - startX + startLeft;
-    if (e.currentTarget.id === 'topText')
-      return setPosition({ ...position, top: { x: toMoveLeft, y: toMoveTop } });
-    if (e.currentTarget.id === 'middleText')
-      return setPosition({
-        ...position,
-        middle: { x: toMoveLeft, y: toMoveTop },
-      });
-    if (e.currentTarget.id === 'bottomText')
-      return setPosition({
-        ...position,
-        bottom: { x: toMoveLeft, y: toMoveTop },
-      });
+    if (e.currentTarget.id === 'topText') {
+      topRef.current!.style.top = `${toMoveTop}px`;
+      topRef.current!.style.left = `${toMoveLeft}px`;
+      return;
+    }
+    if (e.currentTarget.id === 'middleText') {
+      middleRef.current!.style.top = `${toMoveTop}px`;
+      middleRef.current!.style.left = `${toMoveLeft}px`;
+      return;
+    }
+    if (e.currentTarget.id === 'bottomText') {
+      bottomRef.current!.style.top = `${toMoveTop}px`;
+      bottomRef.current!.style.left = `${toMoveLeft}px`;
+      return;
+    }
   };
 
   return currentMeme ? (
@@ -65,7 +62,7 @@ function EditorImage({ currentMeme, text }: Props) {
         onMouseUp={handleMouseUp}
         onMouseMove={(e) => handleMouseMove(e)}
         onMouseLeave={handleMouseUp}
-        position={position}
+        ref={topRef}
       >
         {text.top}
       </ImageText>
@@ -74,7 +71,7 @@ function EditorImage({ currentMeme, text }: Props) {
         onMouseDown={(e) => handleMouseDown(e)}
         onMouseUp={handleMouseUp}
         onMouseMove={(e) => handleMouseMove(e)}
-        position={position}
+        ref={middleRef}
       >
         {text.middle}
       </ImageText>
@@ -83,7 +80,7 @@ function EditorImage({ currentMeme, text }: Props) {
         onMouseDown={(e) => handleMouseDown(e)}
         onMouseUp={handleMouseUp}
         onMouseMove={(e) => handleMouseMove(e)}
-        position={position}
+        ref={bottomRef}
       >
         {text.bottom}
       </ImageText>
@@ -124,33 +121,25 @@ const NoImage = styled.div`
   font-weight: 700;
 `;
 
-const ImageText = styled.div<{ position: Position }>`
+const ImageText = styled.div`
   position: absolute;
   width: fit-content;
+  left: 50%;
+  padding: 10px;
+  transform: translateX(-50%);
   font-size: 2rem;
   font-weight: 900;
   color: #fff;
   text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
-  left: 50%;
-  transform: translateX(-50%);
   user-select: none;
   cursor: pointer;
   &#topText {
-    top: ${(props) =>
-      props.position.top.y === 0 ? '10%' : `${props.position.top.y}px`};
-    left: ${(props) =>
-      props.position.top.x === 0 ? '50%' : `${props.position.top.x}px`};
+    top: 10%;
   }
   &#middleText {
-    top: ${(props) =>
-      props.position.middle.y === 0 ? '50%' : props.position.middle.y};
-    left: ${(props) =>
-      props.position.middle.x === 0 ? '50%' : props.position.middle.x};
+    top: 50%;
   }
   &#bottomText {
-    top: ${(props) =>
-      props.position.bottom.y === 0 ? '90%' : props.position.bottom.y};
-    left: ${(props) =>
-      props.position.bottom.x === 0 ? '50%' : props.position.bottom.x};
+    top: 90%;
   }
 `;
