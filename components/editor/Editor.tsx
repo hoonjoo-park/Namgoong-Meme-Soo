@@ -1,14 +1,16 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { API_DATA, SINGLE_API_DATA, TEXT_TYPE } from 'types';
+import { API_DATA, TEXT_TYPE } from 'types';
 import EditorForm from './EditorForm';
 import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
+import domtoimage from 'dom-to-image';
+import { saveAs } from 'file-saver';
 
 interface Props {
-  apiData: API_DATA;
-  currentMeme: SINGLE_API_DATA | null;
-  setCurrentMeme: Dispatch<SetStateAction<SINGLE_API_DATA | null>>;
+  apiData: API_DATA[];
+  currentMeme: API_DATA | null;
+  setCurrentMeme: Dispatch<SetStateAction<API_DATA | null>>;
 }
 
 function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
@@ -22,9 +24,24 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
   useEffect(() => {
     setText({ top: '', middle: '', bottom: '' });
   }, [currentMeme]);
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  const saveImage = async () => {
+    if (imageRef.current) {
+      const image = imageRef.current;
+      const blob = await domtoimage.toBlob(image);
+      saveAs(blob, 'meme.png');
+    }
+  };
+
   return (
     <EditorBox>
-      <EditorImage currentMeme={currentMeme} text={text} color={color} />
+      <EditorImage
+        currentMeme={currentMeme}
+        text={text}
+        color={color}
+        ref={imageRef}
+      />
       <RightBox>
         <EditorMemeList apiData={apiData} setCurrentMeme={setCurrentMeme} />
         <EditorForm
@@ -33,6 +50,7 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
           setText={setText}
           color={color}
           setColor={setColor}
+          saveImage={saveImage}
         />
       </RightBox>
     </EditorBox>

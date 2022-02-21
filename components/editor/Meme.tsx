@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
-import { API_DATA, SINGLE_API_DATA } from 'types';
+import { API_DATA } from 'types';
 
 interface Props {
-  meme: SINGLE_API_DATA;
-  setCurrentMeme: Dispatch<SetStateAction<SINGLE_API_DATA | null>>;
+  meme: API_DATA;
+  setCurrentMeme: Dispatch<SetStateAction<API_DATA | null>>;
 }
 
 function Meme({ meme, setCurrentMeme }: Props) {

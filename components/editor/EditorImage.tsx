@@ -1,13 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { forwardRef, Ref, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
+import { API_DATA, TEXT_TYPE } from 'types';
 interface Props {
-  currentMeme: SINGLE_API_DATA | null;
+  currentMeme: API_DATA | null;
   text: TEXT_TYPE;
   color: string;
 }
 
-function EditorImage({ currentMeme, text, color }: Props) {
+const EditorImage = (
+  { currentMeme, text, color }: Props,
+  ref: Ref<HTMLDivElement>
+) => {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
   const [startTop, setStartTop] = useState(0);
@@ -52,10 +55,9 @@ function EditorImage({ currentMeme, text, color }: Props) {
       return;
     }
   };
-  console.log(color);
 
   return currentMeme ? (
-    <ImgBox color={color}>
+    <ImgBox color={color} ref={ref}>
       <Img src={currentMeme!.url} alt='meme' draggable='false' />
       <ImageText
         id='topText'
@@ -91,9 +93,9 @@ function EditorImage({ currentMeme, text, color }: Props) {
       <h3>이미지를 선택해주세요</h3>
     </NoImage>
   );
-}
+};
 
-export default EditorImage;
+export default forwardRef(EditorImage);
 
 const ImgBox = styled.div<{ color: string }>`
   position: relative;

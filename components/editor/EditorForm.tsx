@@ -1,17 +1,25 @@
 import { PaletteBox } from 'components/palette/PaletteBox';
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
-import { SINGLE_API_DATA, TEXT_TYPE } from 'types';
+import { API_DATA, TEXT_TYPE } from 'types';
 
 interface Props {
-  currentMeme: SINGLE_API_DATA | null;
+  currentMeme: API_DATA | null;
   text: TEXT_TYPE;
   setText: Dispatch<SetStateAction<TEXT_TYPE>>;
   color: string;
   setColor: Dispatch<SetStateAction<string>>;
+  saveImage: () => void;
 }
 
-function EditorForm({ currentMeme, text, setText, color, setColor }: Props) {
+function EditorForm({
+  currentMeme,
+  text,
+  setText,
+  color,
+  setColor,
+  saveImage,
+}: Props) {
   const handleInput = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -30,6 +38,9 @@ function EditorForm({ currentMeme, text, setText, color, setColor }: Props) {
     return;
   };
 
+  const handleSave = () => {
+    saveImage();
+  };
   return (
     <Form onSubmit={(e) => handleSubmit(e)}>
       <PaletteBox color={color} setColor={setColor} />
@@ -41,6 +52,7 @@ function EditorForm({ currentMeme, text, setText, color, setColor }: Props) {
         value={text.top}
         onChange={(e) => handleInput(e, 'top')}
         onKeyUp={(e) => handleInput(e, 'top')}
+        autoComplete='off'
       />
       <MemeInput
         id='middleInput'
@@ -50,6 +62,7 @@ function EditorForm({ currentMeme, text, setText, color, setColor }: Props) {
         value={text.middle}
         onChange={(e) => handleInput(e, 'middle')}
         onKeyUp={(e) => handleInput(e, 'middle')}
+        autoComplete='off'
       />
       <MemeInput
         id='bottomInput'
@@ -59,8 +72,9 @@ function EditorForm({ currentMeme, text, setText, color, setColor }: Props) {
         value={text.bottom}
         onChange={(e) => handleInput(e, 'bottom')}
         onKeyUp={(e) => handleInput(e, 'bottom')}
+        autoComplete='off'
       />
-      <CreateButton type='submit' value='이미지 생성' />
+      <CreateButton type='submit' value='이미지 생성' onClick={handleSave} />
     </Form>
   );
 }

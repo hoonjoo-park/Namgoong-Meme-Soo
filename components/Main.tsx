@@ -1,24 +1,19 @@
 import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { SINGLE_API_DATA } from 'types';
 import { fetcher } from 'utils/fetcher';
 import Editor from 'components/editor/Editor';
+import { API_DATA } from 'types';
 
-function Main() {
-  const [apiData, setApiData] = useState([]);
-  const [currentMeme, setCurrentMeme] = useState<SINGLE_API_DATA | null>(null);
-  useEffect(() => {
-    (async () => {
-      const {
-        data: { memes },
-      } = await fetcher();
-      setApiData(memes);
-    })();
-  }, []);
+interface Props {
+  memes: API_DATA[];
+}
+
+function Main({ memes }: Props) {
+  const [currentMeme, setCurrentMeme] = useState<API_DATA | null>(null);
   return (
     <MainContainer>
       <Editor
-        apiData={apiData}
+        apiData={memes}
         currentMeme={currentMeme}
         setCurrentMeme={setCurrentMeme}
       />
