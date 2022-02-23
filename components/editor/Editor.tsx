@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { API_DATA, TEXT_TYPE } from 'types';
+import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
 import EditorForm from './EditorForm';
 import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
@@ -9,8 +9,8 @@ import { saveAs } from 'file-saver';
 
 interface Props {
   apiData: API_DATA[];
-  currentMeme: API_DATA | null;
-  setCurrentMeme: Dispatch<SetStateAction<API_DATA | null>>;
+  currentMeme: API_DATA | null | LOCAL_MEME;
+  setCurrentMeme: Dispatch<SetStateAction<API_DATA | null | LOCAL_MEME>>;
 }
 
 function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
@@ -38,6 +38,7 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
     <EditorBox>
       <EditorImage
         currentMeme={currentMeme}
+        setCurrentMeme={setCurrentMeme}
         text={text}
         color={color}
         ref={imageRef}

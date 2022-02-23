@@ -1,10 +1,11 @@
 import { PaletteBox } from 'components/palette/PaletteBox';
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
-import { API_DATA, TEXT_TYPE } from 'types';
+import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
+import { COLOR } from 'constants/';
 
 interface Props {
-  currentMeme: API_DATA | null;
+  currentMeme: API_DATA | null | LOCAL_MEME;
   text: TEXT_TYPE;
   setText: Dispatch<SetStateAction<TEXT_TYPE>>;
   color: string;
@@ -104,10 +105,12 @@ const MemeInput = styled.input`
 
 const CreateButton = styled.input`
   border: none;
-  width: 12rem;
+  width: 10rem;
   height: 3.5rem;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 700;
+  background-color: ${COLOR.blue};
+  color: ${COLOR.white};
   cursor: pointer;
 `;

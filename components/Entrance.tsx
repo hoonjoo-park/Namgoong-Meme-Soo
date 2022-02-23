@@ -15,7 +15,7 @@ function Entrance({ setIsEntered }: Props) {
     <EntranceContainer>
       <WelcomeBox>
         <h3>Are You</h3>
-        <h1>남궁밈수?</h1>
+        <h1>냄궁밈수?</h1>
       </WelcomeBox>
       <Button onClick={handleClick}>Yeah</Button>
     </EntranceContainer>

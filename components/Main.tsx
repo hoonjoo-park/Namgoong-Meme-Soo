@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
-import { fetcher } from 'utils/fetcher';
 import Editor from 'components/editor/Editor';
-import { API_DATA } from 'types';
+import { API_DATA, LOCAL_MEME } from 'types';
 
 interface Props {
   memes: API_DATA[];
 }
 
 function Main({ memes }: Props) {
-  const [currentMeme, setCurrentMeme] = useState<API_DATA | null>(null);
+  const [currentMeme, setCurrentMeme] = useState<API_DATA | null | LOCAL_MEME>(
+    null
+  );
   return (
     <MainContainer>
       <Editor

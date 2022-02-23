@@ -7,6 +7,10 @@ export type API_DATA = {
   url: string;
 };
 
+export type LOCAL_MEME = {
+  url: string;
+};
+
 export type TEXT_TYPE = {
   top: string;
   middle: string;

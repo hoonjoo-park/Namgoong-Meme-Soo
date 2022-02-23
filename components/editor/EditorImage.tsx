@@ -1,14 +1,23 @@
-import React, { forwardRef, Ref, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  forwardRef,
+  Ref,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react';
 import styled from '@emotion/styled';
-import { API_DATA, TEXT_TYPE } from 'types';
+import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
+import { COLOR } from 'constants/';
 interface Props {
-  currentMeme: API_DATA | null;
+  currentMeme: API_DATA | null | LOCAL_MEME;
+  setCurrentMeme: Dispatch<SetStateAction<API_DATA | null | LOCAL_MEME>>;
   text: TEXT_TYPE;
   color: string;
 }
 
 const EditorImage = (
-  { currentMeme, text, color }: Props,
+  { currentMeme, text, color, setCurrentMeme }: Props,
   ref: Ref<HTMLDivElement>
 ) => {
   const [startX, setStartX] = useState(0);
@@ -56,6 +65,12 @@ const EditorImage = (
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.currentTarget.files![0];
+    const url = URL.createObjectURL(file);
+    setCurrentMeme({ url: url });
+  };
+
   return currentMeme ? (
     <ImgBox color={color} ref={ref}>
       <Img src={currentMeme!.url} alt='meme' draggable='false' />
@@ -91,6 +106,14 @@ const EditorImage = (
   ) : (
     <NoImage>
       <h3>이미지를 선택해주세요</h3>
+      <label htmlFor='uploadImage'>직접 업로드</label>
+      <input
+        type='file'
+        accept='image/*'
+        name='uploadImage'
+        id='uploadImage'
+        onChange={(e) => handleChange(e)}
+      />
     </NoImage>
   );
 };
@@ -115,6 +138,7 @@ const Img = styled.img`
 
 const NoImage = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -123,8 +147,24 @@ const NoImage = styled.div`
   border: 1px solid #eaeaea;
   border-radius: 5px;
   margin-right: 1rem;
-  font-size: 1.2rem;
-  font-weight: 700;
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  input {
+    display: none;
+  }
+  label {
+    background-color: ${COLOR.blue};
+    color: ${COLOR.white};
+    border-radius: 5px;
+    width: 7rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+  }
 `;
 
 const ImageText = styled.div`

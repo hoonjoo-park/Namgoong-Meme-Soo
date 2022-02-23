@@ -16,7 +16,7 @@ const Home = ({ memes }: Props) => {
   return (
     <div>
       <Head>
-        <title>남궁밈수 | 밈 생성기</title>
+        <title>냄궁밈수 | 밈 생성기</title>
       </Head>
       {isEntered ? (
         <Main memes={memes} />
