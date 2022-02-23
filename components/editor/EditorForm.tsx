@@ -96,7 +96,7 @@ const MemeInput = styled.input`
   margin-bottom: 2rem;
   padding: 0 1em;
   width: calc(100% - 2em);
-  height: 4rem;
+  height: 3.5rem;
   font-size: 1.1rem;
   border-radius: 5px;
   border: 1px solid #eaeaea;

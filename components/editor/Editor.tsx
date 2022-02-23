@@ -61,7 +61,8 @@ export default Editor;
 
 const EditorBox = styled.div`
   display: flex;
-  height: 47rem;
+  height: 40rem;
+  width: 70vw;
   padding: 1.5em;
   border-radius: 5px;
   box-shadow: 0px 3px 14px -1px rgba(0, 0, 0, 0.75);
