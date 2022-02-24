@@ -25,6 +25,7 @@ const EditorImage = (
   const [startTop, setStartTop] = useState(0);
   const [startLeft, setStartLeft] = useState(0);
   const [isDown, setIsDown] = useState(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const topRef = useRef<HTMLDivElement>(null);
   const middleRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,29 @@ const EditorImage = (
 
   const handleMouseUp = () => {
     setIsDown(false);
+  };
+
+  const handleEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  const handleOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+  const handleUnactive = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleUnactive(e);
+    const file = e.dataTransfer.files[0];
+    const url = URL.createObjectURL(file);
+    setCurrentMeme({ url: url });
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
@@ -70,7 +94,6 @@ const EditorImage = (
     const url = URL.createObjectURL(file);
     setCurrentMeme({ url: url });
   };
-
   return currentMeme ? (
     <ImgBox color={color} ref={ref}>
       <Img src={currentMeme!.url} alt='meme' draggable='false' />
@@ -104,7 +127,13 @@ const EditorImage = (
       </ImageText>
     </ImgBox>
   ) : (
-    <NoImage>
+    <NoImage
+      className={isDragging ? 'dragging' : ''}
+      onDragEnter={(e) => handleEnter(e)}
+      onDragOver={(e) => handleOver(e)}
+      onDragLeave={(e) => handleUnactive(e)}
+      onDrop={(e) => handleDrop(e)}
+    >
       <h3>이미지를 선택해주세요</h3>
       <label htmlFor='uploadImage'>직접 업로드</label>
       <input
@@ -164,6 +193,9 @@ const NoImage = styled.div`
     line-height: 2.5rem;
     text-align: center;
     cursor: pointer;
+  }
+  &.dragging {
+    border: 2px solid ${COLOR.blue};
   }
 `;
 

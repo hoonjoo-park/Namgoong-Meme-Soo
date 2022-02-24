@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Editor from 'components/editor/Editor';
 import { API_DATA, LOCAL_MEME } from 'types';

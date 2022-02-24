@@ -105,8 +105,8 @@ const MemeInput = styled.input`
 
 const CreateButton = styled.input`
   border: none;
-  width: 10rem;
-  height: 3.5rem;
+  width: 9rem;
+  height: 3rem;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 700;

@@ -53,7 +53,7 @@ const WelcomeBox = styled.div`
 
 const Button = styled.button`
   width: 8rem;
-  height: 4rem;
+  height: 3.5rem;
   border: none;
   border-radius: 5px;
   font-size: 1.2rem;
