@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import Editor from 'components/editor/Editor';
 import { API_DATA, LOCAL_MEME } from 'types';
+import { DEVICE } from 'constants/';
 
 interface Props {
   memes: API_DATA[];
@@ -30,4 +31,8 @@ const MainContainer = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  @media ${DEVICE.PHONE} {
+    height: 100%;
+    overflow: scroll;
+  }
 `;

@@ -9,6 +9,7 @@ import React, {
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
 import { COLOR, DEVICE } from 'constants/';
+import { ImageText } from './ImageText';
 interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
   setCurrentMeme: Dispatch<SetStateAction<API_DATA | null | LOCAL_MEME>>;
@@ -20,29 +21,7 @@ const EditorImage = (
   { currentMeme, text, color, setCurrentMeme }: Props,
   ref: Ref<HTMLDivElement>
 ) => {
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
-  const [startTop, setStartTop] = useState(0);
-  const [startLeft, setStartLeft] = useState(0);
-  const [isDown, setIsDown] = useState(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
-
-  const topRef = useRef<HTMLDivElement>(null);
-  const middleRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    setIsDown(true);
-    setStartX(e.pageX);
-    setStartY(e.pageY);
-    setStartTop(e.currentTarget.offsetTop);
-    setStartLeft(e.currentTarget.offsetLeft);
-  };
-
-  const handleMouseUp = () => {
-    setIsDown(false);
-  };
 
   const handleEnter = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -60,33 +39,10 @@ const EditorImage = (
   };
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
     handleUnactive(e);
     const file = e.dataTransfer.files[0];
     const url = URL.createObjectURL(file);
     setCurrentMeme({ url: url });
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const toMoveTop = e.pageY - startY + startTop;
-    const toMoveLeft = e.pageX - startX + startLeft;
-    if (e.currentTarget.id === 'topText') {
-      topRef.current!.style.top = `${toMoveTop}px`;
-      topRef.current!.style.left = `${toMoveLeft}px`;
-      return;
-    }
-    if (e.currentTarget.id === 'middleText') {
-      middleRef.current!.style.top = `${toMoveTop}px`;
-      middleRef.current!.style.left = `${toMoveLeft}px`;
-      return;
-    }
-    if (e.currentTarget.id === 'bottomText') {
-      bottomRef.current!.style.top = `${toMoveTop}px`;
-      bottomRef.current!.style.left = `${toMoveLeft}px`;
-      return;
-    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,37 +50,11 @@ const EditorImage = (
     const url = URL.createObjectURL(file);
     setCurrentMeme({ url: url });
   };
+
   return currentMeme ? (
     <ImgBox color={color} ref={ref}>
       <Img src={currentMeme!.url} alt='meme' draggable='false' />
-      <ImageText
-        id='topText'
-        onMouseDown={(e) => handleMouseDown(e)}
-        onMouseUp={handleMouseUp}
-        onMouseMove={(e) => handleMouseMove(e)}
-        onMouseLeave={handleMouseUp}
-        ref={topRef}
-      >
-        {text.top}
-      </ImageText>
-      <ImageText
-        id='middleText'
-        onMouseDown={(e) => handleMouseDown(e)}
-        onMouseUp={handleMouseUp}
-        onMouseMove={(e) => handleMouseMove(e)}
-        ref={middleRef}
-      >
-        {text.middle}
-      </ImageText>
-      <ImageText
-        id='bottomText'
-        onMouseDown={(e) => handleMouseDown(e)}
-        onMouseUp={handleMouseUp}
-        onMouseMove={(e) => handleMouseMove(e)}
-        ref={bottomRef}
-      >
-        {text.bottom}
-      </ImageText>
+      <ImageText text={text} />
     </ImgBox>
   ) : (
     <NoImage
@@ -202,27 +132,7 @@ const NoImage = styled.div`
   }
   @media ${DEVICE.PHONE} {
     width: 100%;
-  }
-`;
-
-const ImageText = styled.div`
-  position: absolute;
-  width: fit-content;
-  left: 50%;
-  padding: 10px;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  font-weight: 900;
-  text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
-  user-select: none;
-  cursor: pointer;
-  &#topText {
-    top: 10%;
-  }
-  &#middleText {
-    top: 50%;
-  }
-  &#bottomText {
-    top: 90%;
+    height: 350px;
+    flex-shrink: 0;
   }
 `;

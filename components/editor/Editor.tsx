@@ -77,8 +77,7 @@ const EditorBox = styled.div`
     width: 100vw;
     min-height: 100vh;
     height: 100%;
-    padding: 2em 1em;
-    overflow-y: scroll;
+    padding: 0 0.5em;
   }
 `;
 
