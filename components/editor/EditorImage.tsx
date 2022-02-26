@@ -200,6 +200,9 @@ const NoImage = styled.div`
   &.dragging {
     border: 2px solid ${COLOR.blue};
   }
+  @media ${DEVICE.PHONE} {
+    width: 100%;
+  }
 `;
 
 const ImageText = styled.div`
