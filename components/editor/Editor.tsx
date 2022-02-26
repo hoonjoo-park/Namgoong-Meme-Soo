@@ -6,6 +6,7 @@ import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
+import { DEVICE } from 'constants/';
 
 interface Props {
   apiData: API_DATA[];
@@ -68,10 +69,24 @@ const EditorBox = styled.div`
   border-radius: 5px;
   box-shadow: 0px 3px 14px -1px rgba(0, 0, 0, 0.75);
   overflow: hidden;
+  @media ${DEVICE.TABLET} {
+    width: 100vw;
+  }
+  @media ${DEVICE.PHONE} {
+    flex-direction: column;
+    width: 100vw;
+    min-height: 100vh;
+    height: 100%;
+    padding: 2em 1em;
+    overflow-y: scroll;
+  }
 `;
 
 const RightBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(60% - 1em);
+  @media ${DEVICE.PHONE} {
+    width: 100%;
+  }
 `;

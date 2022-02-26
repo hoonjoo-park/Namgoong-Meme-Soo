@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { EntranceBG } from 'images';
-import { COLOR } from 'constants/';
+import { COLOR, DEVICE } from 'constants/';
 
 interface Props {
   setIsEntered: Dispatch<SetStateAction<boolean>>;
@@ -49,6 +49,17 @@ const WelcomeBox = styled.div`
   h3 {
     margin-bottom: 2rem;
   }
+  @media ${DEVICE.TABLET} {
+    font-size: 4rem;
+    margin-bottom: 2.5rem;
+    h3 {
+      margin-bottom: 1rem;
+    }
+  }
+  @media ${DEVICE.PHONE} {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const Button = styled.button`
@@ -61,4 +72,13 @@ const Button = styled.button`
   background-color: ${COLOR.blue};
   color: #ffffff;
   cursor: pointer;
+  @media ${DEVICE.TABLET} {
+    width: 7rem;
+    height: 3rem;
+  }
+  @media ${DEVICE.PHONE} {
+    width: 5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
 `;

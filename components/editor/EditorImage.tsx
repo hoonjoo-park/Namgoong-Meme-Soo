@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
-import { COLOR } from 'constants/';
+import { COLOR, DEVICE } from 'constants/';
 interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
   setCurrentMeme: Dispatch<SetStateAction<API_DATA | null | LOCAL_MEME>>;
@@ -152,11 +152,14 @@ export default forwardRef(EditorImage);
 const ImgBox = styled.div<{ color: string }>`
   position: relative;
   flex-shrink: 0;
-  width: 32rem;
+  width: 40%;
   border-radius: 5px;
   margin-right: 1rem;
   & * {
     color: ${(props) => props.color};
+  }
+  @media ${DEVICE.PHONE} {
+    width: 100%;
   }
 `;
 
@@ -171,7 +174,7 @@ const NoImage = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 32rem;
+  width: 40%;
   height: 100%;
   border: 1px solid #eaeaea;
   border-radius: 5px;
