@@ -27,12 +27,20 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
   }, [currentMeme]);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  const saveImage = async () => {
-    if (imageRef.current) {
-      const image = imageRef.current;
-      const blob = await domtoimage.toBlob(image);
-      saveAs(blob, 'meme.png');
+  const saveImage = async (num: number) => {
+    if (!imageRef.current) {
+      saveImage(0);
+      return;
     }
+    if (num === 0) {
+      const image = imageRef.current;
+      const png = await domtoimage.toBlob(image);
+      saveImage(1);
+      return;
+    }
+    const image = imageRef.current;
+    const png = await domtoimage.toBlob(image);
+    saveAs(png, 'meme.png');
   };
 
   return (
@@ -64,6 +72,7 @@ export default Editor;
 const EditorBox = styled.div`
   display: flex;
   height: 40rem;
+  max-width: 1200px;
   width: 70vw;
   padding: 1.5em;
   border-radius: 5px;

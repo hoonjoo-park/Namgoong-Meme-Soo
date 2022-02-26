@@ -10,7 +10,7 @@ interface Props {
   setText: Dispatch<SetStateAction<TEXT_TYPE>>;
   color: string;
   setColor: Dispatch<SetStateAction<string>>;
-  saveImage: () => void;
+  saveImage: (num: number) => void;
 }
 
 function EditorForm({
@@ -40,7 +40,7 @@ function EditorForm({
   };
 
   const handleSave = () => {
-    saveImage();
+    saveImage(0);
   };
   return (
     <Form onSubmit={(e) => handleSubmit(e)}>
