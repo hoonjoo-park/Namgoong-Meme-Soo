@@ -8,6 +8,6 @@
 
 ## 배포 주소
 
-[https://meme-gen-hoon.vercel.app/](https://meme-gen-hoon.vercel.app/)
+[https://namgoong-meme-soo.vercel.app/](https://namgoong-meme-soo.vercel.app/)
 
 ---
