@@ -48,7 +48,7 @@ function EditorForm({
       <MemeInput
         id='topInput'
         type='text'
-        placeholder='상단 메시지를 입력해주세요'
+        placeholder='텍스트1 (텍스트 위치 조정 가능)'
         disabled={currentMeme === null && true}
         value={text.top}
         onChange={(e) => handleInput(e, 'top')}
@@ -58,7 +58,7 @@ function EditorForm({
       <MemeInput
         id='middleInput'
         type='text'
-        placeholder='중앙 메시지를 입력해주세요'
+        placeholder='텍스트2 (텍스트 위치 조정 가능)'
         disabled={currentMeme === null && true}
         value={text.middle}
         onChange={(e) => handleInput(e, 'middle')}
@@ -68,14 +68,14 @@ function EditorForm({
       <MemeInput
         id='bottomInput'
         type='text'
-        placeholder='하단 메시지를 입력해주세요'
+        placeholder='텍스트3 (텍스트 위치 조정 가능)'
         disabled={currentMeme === null && true}
         value={text.bottom}
         onChange={(e) => handleInput(e, 'bottom')}
         onKeyUp={(e) => handleInput(e, 'bottom')}
         autoComplete='off'
       />
-      <CreateButton type='submit' value='이미지 생성' onClick={handleSave} />
+      <CreateButton type='submit' value='이미지 저장' onClick={handleSave} />
     </Form>
   );
 }

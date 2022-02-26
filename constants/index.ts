@@ -4,6 +4,7 @@ export const COLOR = {
   white: '#ffffff',
   black: '#000000',
   blue: '#1C6DD0',
+  red: '#E23E57',
 };
 
 export const COLOR_PALETTE = [

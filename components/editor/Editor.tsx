@@ -53,7 +53,11 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
         ref={imageRef}
       />
       <RightBox>
-        <EditorMemeList apiData={apiData} setCurrentMeme={setCurrentMeme} />
+        <EditorMemeList
+          apiData={apiData}
+          currentMeme={currentMeme}
+          setCurrentMeme={setCurrentMeme}
+        />
         <EditorForm
           currentMeme={currentMeme}
           text={text}

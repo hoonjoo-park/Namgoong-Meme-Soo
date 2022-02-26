@@ -3,13 +3,13 @@ import React, {
   forwardRef,
   Ref,
   SetStateAction,
-  useRef,
   useState,
 } from 'react';
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
 import { COLOR, DEVICE } from 'constants/';
 import { ImageText } from './ImageText';
+import { TiDelete } from 'react-icons/ti';
 interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
   setCurrentMeme: Dispatch<SetStateAction<API_DATA | null | LOCAL_MEME>>;
