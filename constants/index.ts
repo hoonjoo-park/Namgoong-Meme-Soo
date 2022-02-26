@@ -15,3 +15,8 @@ export const COLOR_PALETTE = [
   '#FF6F3C',
   '#6639A6',
 ];
+
+export const DEVICE = {
+  PHONE: `(max-width: 768px)`,
+  TABLET: `(max-width: 1024px)`,
+};

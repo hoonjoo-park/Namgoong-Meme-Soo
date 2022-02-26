@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME } from 'types';
+import { DEVICE } from 'constants/';
 
 interface Props {
   meme: API_DATA;
@@ -29,5 +30,9 @@ const MemeBox = styled.img`
   }
   &:hover {
     transform: scale(1.05);
+  }
+  @media ${DEVICE.PHONE} {
+    min-width: 3rem;
+    height: 3rem;
   }
 `;

@@ -2,7 +2,7 @@ import { PaletteBox } from 'components/palette/PaletteBox';
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
-import { COLOR } from 'constants/';
+import { COLOR, DEVICE } from 'constants/';
 
 interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
@@ -87,6 +87,7 @@ const Form = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: calc(100%-2em);
   height: 100%;
   padding: 2em;
   border: 1px solid #eaeaea;
@@ -101,6 +102,11 @@ const MemeInput = styled.input`
   font-size: 1.1rem;
   border-radius: 5px;
   border: 1px solid #eaeaea;
+  @media ${DEVICE.PHONE} {
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
 `;
 
 const CreateButton = styled.input`
@@ -113,4 +119,9 @@ const CreateButton = styled.input`
   background-color: ${COLOR.blue};
   color: ${COLOR.white};
   cursor: pointer;
+  @media ${DEVICE.PHONE} {
+    width: 100%;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
 `;

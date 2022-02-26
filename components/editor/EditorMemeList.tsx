@@ -2,6 +2,7 @@ import Meme from 'components/editor/Meme';
 import { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME } from 'types';
+import { DEVICE } from 'constants/';
 
 interface Props {
   apiData: API_DATA[];
@@ -24,21 +25,15 @@ export default EditorMemeList;
 
 const MemeListContainer = styled.div`
   position: relative;
-  width: 36.5rem;
-  height: 18rem;
-  padding: 2em;
+  width: calc(100%-1em);
+  height: 100%;
+  padding: 1em;
   border: 1px solid #eaeaea;
   border-radius: 5px;
   margin-bottom: 2rem;
   overflow: scroll;
-  &::after {
-    content: '';
-    position: absolute;
-    width: 2em;
-    height: 100%;
-    background-color: #ffffff;
-    right: 0;
-    top: 0;
+  @media ${DEVICE.PHONE} {
+    margin-bottom: 0.5rem;
   }
 `;
 
@@ -46,5 +41,4 @@ const MemeContainer = styled.ul`
   display: flex;
   align-items: center;
   height: 100%;
-  min-width: 30rem;
 `;

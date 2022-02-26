@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from '@emotion/styled';
+import { DEVICE } from 'constants/';
 
 interface Props {
   color: string;
@@ -40,5 +41,12 @@ const ColorItem = styled.li<StyleProps>`
   }
   &.active {
     border: 2px solid #00adb5;
+  }
+  @media ${DEVICE.PHONE} {
+    width: 2rem;
+    height: 2rem;
+    &:not(:last-child) {
+      margin-right: 0.5rem;
+    }
   }
 `;
