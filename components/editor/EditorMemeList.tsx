@@ -18,11 +18,9 @@ function EditorMemeList({ apiData, currentMeme, setCurrentMeme }: Props) {
   return (
     <MemeListContainer>
       <MemeContainer>
-        {currentMeme && (
-          <ClearButton onClick={handleClear}>
-            <FaRedoAlt />
-          </ClearButton>
-        )}
+        <ClearButton onClick={handleClear}>
+          <FaRedoAlt />
+        </ClearButton>
         {apiData.map((data) => (
           <Meme key={data.id} meme={data} setCurrentMeme={setCurrentMeme} />
         ))}

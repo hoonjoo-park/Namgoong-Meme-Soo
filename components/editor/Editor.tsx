@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
+import { API_DATA, LOCAL_MEME, TEXT_BOUNDARY, TEXT_TYPE } from 'types';
 import EditorForm from './EditorForm';
 import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
@@ -21,11 +21,22 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
     bottom: '',
   });
   const [color, setColor] = useState<string>('#000000');
+  const [textBoundary, setTextBoundary] = useState<TEXT_BOUNDARY | null>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setText({ top: '', middle: '', bottom: '' });
+    if (currentMeme) {
+      const image = imageRef.current;
+      const rightBoundary = image!.offsetWidth;
+      const bottomBoundary = image!.offsetHeight;
+      const boundary = {
+        right: rightBoundary,
+        bottom: bottomBoundary,
+      };
+      setTextBoundary(boundary);
+    }
   }, [currentMeme]);
-  const imageRef = useRef<HTMLDivElement>(null);
 
   const saveImage = async (num: number) => {
     if (!imageRef.current) {
@@ -51,6 +62,7 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
         text={text}
         color={color}
         ref={imageRef}
+        textBoundary={textBoundary}
       />
       <RightBox>
         <EditorMemeList

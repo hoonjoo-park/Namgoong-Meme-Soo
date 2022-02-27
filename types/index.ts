@@ -16,3 +16,8 @@ export type TEXT_TYPE = {
   middle: string;
   bottom: string;
 };
+
+export interface TEXT_BOUNDARY {
+  right: number;
+  bottom: number;
+}
