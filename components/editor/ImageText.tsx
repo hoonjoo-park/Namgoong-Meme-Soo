@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import { TEXT_TYPE } from 'types';
+import { TEXT_BOUNDARY, TEXT_TYPE } from 'types';
 
 interface Props {
   text: TEXT_TYPE;
+  textBoundary: TEXT_BOUNDARY | null;
 }
 
-export const ImageText = ({ text }: Props) => {
+export const ImageText = ({ text, textBoundary }: Props) => {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
   const [startTop, setStartTop] = useState(0);
@@ -37,6 +38,12 @@ export const ImageText = ({ text }: Props) => {
     e.stopPropagation();
     const toMoveTop = e.pageY - startY + startTop;
     const toMoveLeft = e.pageX - startX + startLeft;
+    const moveOptions =
+      toMoveTop + 10 <= 0 ||
+      toMoveTop + e.currentTarget.offsetHeight - 10 >= textBoundary!.bottom ||
+      toMoveLeft - e.currentTarget.offsetWidth / 2 + 10 <= 0 ||
+      toMoveLeft + e.currentTarget.offsetWidth / 2 - 10 >= textBoundary!.right;
+    if (moveOptions) return;
     textMover(toMoveTop, toMoveLeft, e);
   };
 
