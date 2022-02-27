@@ -61,6 +61,21 @@ export const ImageText = ({ text, textBoundary }: Props) => {
     e.stopPropagation();
     const toMoveTop = e.changedTouches[0].pageY - startY + startTop;
     const toMoveLeft = e.changedTouches[0].pageX - startX + startLeft;
+    const moveOptions =
+      toMoveTop + 10 <= 0 ||
+      toMoveTop + e.currentTarget.offsetHeight - 10 >= textBoundary!.bottom ||
+      toMoveLeft - e.currentTarget.offsetWidth / 2 + 10 <= 0 ||
+      toMoveLeft + e.currentTarget.offsetWidth / 2 - 10 >= textBoundary!.right;
+    console.log(
+      'to Left:',
+      toMoveLeft,
+      'to Top:',
+      toMoveTop,
+      textBoundary,
+      'width:',
+      e.currentTarget.offsetWidth
+    );
+    if (moveOptions) return;
     textMover(toMoveTop, toMoveLeft, e);
   };
 
