@@ -1,37 +1,73 @@
 import { PaletteBox } from 'components/palette/PaletteBox';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from '@emotion/styled';
 import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
 import { COLOR, DEVICE } from 'constants/';
+import { EditorInput } from './EditorInput';
 
 interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
   text: TEXT_TYPE;
   setText: Dispatch<SetStateAction<TEXT_TYPE>>;
-  color: string;
-  setColor: Dispatch<SetStateAction<string>>;
   saveImage: (num: number) => void;
+  setInputs: Dispatch<SetStateAction<number[]>>;
+  inputs: number[];
 }
 
 function EditorForm({
   currentMeme,
   text,
   setText,
-  color,
-  setColor,
   saveImage,
+  setInputs,
+  inputs,
 }: Props) {
   const handleInput = (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.KeyboardEvent<HTMLInputElement>,
-    type: string
+    num: number
   ) => {
-    if (type === 'top') return setText({ ...text, top: e.currentTarget.value });
-    if (type === 'middle')
-      return setText({ ...text, middle: e.currentTarget.value });
-    if (type === 'bottom')
-      return setText({ ...text, bottom: e.currentTarget.value });
+    switch (num) {
+      case 0:
+        setText({
+          ...text,
+          '0': { text: e.currentTarget.value, color: text[0]['color'] },
+        });
+        break;
+      case 1:
+        setText({
+          ...text,
+          '1': { text: e.currentTarget.value, color: text[1]['color'] },
+        });
+        break;
+      case 2:
+        setText({
+          ...text,
+          '2': { text: e.currentTarget.value, color: text[2]['color'] },
+        });
+        break;
+      case 3:
+        setText({
+          ...text,
+          '3': { text: e.currentTarget.value, color: text[3]['color'] },
+        });
+        break;
+      case 4:
+        setText({
+          ...text,
+          '4': { text: e.currentTarget.value, color: text[4]['color'] },
+        });
+        break;
+      case 5:
+        setText({
+          ...text,
+          '5': { text: e.currentTarget.value, color: text[5]['color'] },
+        });
+        break;
+      default:
+        text;
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,41 +78,33 @@ function EditorForm({
   const handleSave = () => {
     saveImage(0);
   };
+
+  const handleAdd = () => {
+    if (inputs.length === 6) {
+      window.alert('최대 6개 까지 추가 가능합니다.');
+      return;
+    }
+    const newInputs = [...inputs, inputs.length];
+    setInputs(newInputs);
+  };
+
   return (
-    <Form onSubmit={(e) => handleSubmit(e)}>
-      <PaletteBox color={color} setColor={setColor} />
-      <MemeInput
-        id='topInput'
-        type='text'
-        placeholder='텍스트1 (텍스트 위치 조정 가능)'
-        disabled={currentMeme === null && true}
-        value={text.top}
-        onChange={(e) => handleInput(e, 'top')}
-        onKeyUp={(e) => handleInput(e, 'top')}
-        autoComplete='off'
-      />
-      <MemeInput
-        id='middleInput'
-        type='text'
-        placeholder='텍스트2 (텍스트 위치 조정 가능)'
-        disabled={currentMeme === null && true}
-        value={text.middle}
-        onChange={(e) => handleInput(e, 'middle')}
-        onKeyUp={(e) => handleInput(e, 'middle')}
-        autoComplete='off'
-      />
-      <MemeInput
-        id='bottomInput'
-        type='text'
-        placeholder='텍스트3 (텍스트 위치 조정 가능)'
-        disabled={currentMeme === null && true}
-        value={text.bottom}
-        onChange={(e) => handleInput(e, 'bottom')}
-        onKeyUp={(e) => handleInput(e, 'bottom')}
-        autoComplete='off'
-      />
-      <CreateButton type='submit' value='이미지 저장' onClick={handleSave} />
-    </Form>
+    <>
+      <Form onSubmit={(e) => handleSubmit(e)}>
+        <AddButton onClick={handleAdd}>텍스트 추가</AddButton>
+        {inputs.map((input, i) => (
+          <EditorInput
+            key={`input-${i}`}
+            index={i}
+            currentMeme={currentMeme}
+            text={text}
+            handleInput={handleInput}
+            setText={setText}
+          />
+        ))}
+        <CreateButton type='submit' value='이미지 저장' onClick={handleSave} />
+      </Form>
+    </>
   );
 }
 
@@ -86,33 +114,33 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   width: calc(100%-2em);
   height: 100%;
+  overflow-y: scroll;
   padding: 2em;
   border: 1px solid #eaeaea;
   border-radius: 5px;
 `;
 
-const MemeInput = styled.input`
-  margin-bottom: 2rem;
-  padding: 0 1em;
-  width: calc(100% - 2em);
-  height: 3.5rem;
-  font-size: 1.1rem;
+const AddButton = styled.button`
+  margin-left: auto;
+  margin-bottom: 1rem;
+  width: 6rem;
+  height: 2rem;
+  flex-shrink: 0;
+  background-color: ${COLOR.green};
+  color: ${COLOR.white};
+  border: none;
   border-radius: 5px;
-  border: 1px solid #eaeaea;
-  @media ${DEVICE.PHONE} {
-    height: 2.5rem;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-  }
+  cursor: pointer;
 `;
 
 const CreateButton = styled.input`
   border: none;
   width: 9rem;
   height: 3rem;
+  margin-top: 1rem;
+  flex-shrink: 0;
   border-radius: 5px;
   font-size: 1rem;
   font-weight: 700;
