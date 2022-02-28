@@ -22,47 +22,42 @@ function EditorForm({
   setInputs,
   inputs,
 }: Props) {
-  const handleInput = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLInputElement>,
-    num: number
-  ) => {
+  const handleInput = (value: string, num: number) => {
     switch (num) {
       case 0:
         setText({
           ...text,
-          '0': { text: e.currentTarget.value, color: text[0]['color'] },
+          '0': { text: value, color: text[0]['color'] },
         });
         break;
       case 1:
         setText({
           ...text,
-          '1': { text: e.currentTarget.value, color: text[1]['color'] },
+          '1': { text: value, color: text[1]['color'] },
         });
         break;
       case 2:
         setText({
           ...text,
-          '2': { text: e.currentTarget.value, color: text[2]['color'] },
+          '2': { text: value, color: text[2]['color'] },
         });
         break;
       case 3:
         setText({
           ...text,
-          '3': { text: e.currentTarget.value, color: text[3]['color'] },
+          '3': { text: value, color: text[3]['color'] },
         });
         break;
       case 4:
         setText({
           ...text,
-          '4': { text: e.currentTarget.value, color: text[4]['color'] },
+          '4': { text: value, color: text[4]['color'] },
         });
         break;
       case 5:
         setText({
           ...text,
-          '5': { text: e.currentTarget.value, color: text[5]['color'] },
+          '5': { text: value, color: text[5]['color'] },
         });
         break;
       default:
@@ -100,6 +95,8 @@ function EditorForm({
             text={text}
             handleInput={handleInput}
             setText={setText}
+            inputs={inputs}
+            setInputs={setInputs}
           />
         ))}
         <CreateButton type='submit' value='이미지 저장' onClick={handleSave} />

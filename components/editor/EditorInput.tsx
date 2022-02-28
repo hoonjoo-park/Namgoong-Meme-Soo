@@ -3,6 +3,7 @@ import React, {
   Dispatch,
   KeyboardEvent,
   SetStateAction,
+  useRef,
   useState,
 } from 'react';
 import styled from '@emotion/styled';
@@ -15,11 +16,10 @@ interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
   text: TEXT_TYPE;
   index: number;
-  handleInput: (
-    e: ChangeEvent<HTMLInputElement> | KeyboardEvent<HTMLInputElement>,
-    num: number
-  ) => void;
+  handleInput: (value: string, num: number) => void;
   setText: Dispatch<SetStateAction<TEXT_TYPE>>;
+  setInputs: Dispatch<SetStateAction<number[]>>;
+  inputs: number[];
 }
 
 export const EditorInput = ({
@@ -28,9 +28,10 @@ export const EditorInput = ({
   index,
   handleInput,
   setText,
+  setInputs,
+  inputs,
 }: Props) => {
   const [color, setColor] = useState<string>('#000000');
-
   const handleColor = (color: string, number: number) => {
     switch (number) {
       case 0:
@@ -73,6 +74,28 @@ export const EditorInput = ({
         text;
     }
   };
+  const handleDelete = () => {
+    const lastIndex = inputs.length - 1;
+    // 끝의 인풋을 삭제한 것이 아니라면?
+    const newInputs = inputs.filter((input, i) => i !== index);
+    setInputs(newInputs);
+    if (index < inputs.length - 1) {
+      let newText = text;
+      for (let i = index; i < inputs.length - 1; i++) {
+        newText = {
+          ...newText,
+          [i]: { text: newText[i + 1]['text'], color: newText[i + 1]['text'] },
+        };
+      }
+      newText = {
+        ...newText,
+        [lastIndex]: { text: '', color: newText[lastIndex].color },
+      };
+      setText(newText);
+      return;
+    }
+    handleInput('', lastIndex);
+  };
   return (
     <InputBox>
       <MemeInput
@@ -80,8 +103,8 @@ export const EditorInput = ({
         placeholder={`텍스트${index + 1} (위치 조정 가능)`}
         disabled={currentMeme === null && true}
         value={text[index]['text']}
-        onChange={(e) => handleInput(e, index)}
-        onKeyUp={(e) => handleInput(e, index)}
+        onChange={(e) => handleInput(e.target.value, index)}
+        onKeyUp={(e) => handleInput(e.currentTarget.value, index)}
         autoComplete='off'
       />
       <OptionBox>
@@ -91,7 +114,7 @@ export const EditorInput = ({
           handleColor={handleColor}
           index={index}
         />
-        <DeleteButton>
+        <DeleteButton onClick={handleDelete}>
           <BiMinus />
         </DeleteButton>
       </OptionBox>
