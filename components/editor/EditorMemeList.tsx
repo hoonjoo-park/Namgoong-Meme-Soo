@@ -34,7 +34,7 @@ export default EditorMemeList;
 const MemeListContainer = styled.div`
   position: relative;
   width: calc(100%-1em);
-  height: 100%;
+  height: 8rem;
   padding: 1em;
   border: 1px solid #eaeaea;
   border-radius: 5px;

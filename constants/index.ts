@@ -5,6 +5,7 @@ export const COLOR = {
   black: '#000000',
   blue: '#1C6DD0',
   red: '#E23E57',
+  green: '#21AC89',
 };
 
 export const COLOR_PALETTE = [
@@ -21,3 +22,14 @@ export const DEVICE = {
   PHONE: `(max-width: 768px)`,
   TABLET: `(max-width: 1024px)`,
 };
+
+export const DEFAULT_TEXT = {
+  0: { text: '', color: '#000000' },
+  1: { text: '', color: '#000000' },
+  2: { text: '', color: '#000000' },
+  3: { text: '', color: '#000000' },
+  4: { text: '', color: '#000000' },
+  5: { text: '', color: '#000000' },
+};
+
+export const INPUTS = [0, 1, 2];

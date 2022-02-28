@@ -13,12 +13,12 @@ interface Props {
   currentMeme: API_DATA | null | LOCAL_MEME;
   setCurrentMeme: Dispatch<SetStateAction<API_DATA | null | LOCAL_MEME>>;
   text: TEXT_TYPE;
-  color: string;
   textBoundary: TEXT_BOUNDARY | null;
+  inputs: number[];
 }
 
 const EditorImage = (
-  { currentMeme, text, color, setCurrentMeme, textBoundary }: Props,
+  { currentMeme, text, setCurrentMeme, textBoundary, inputs }: Props,
   ref: Ref<HTMLDivElement>
 ) => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -50,9 +50,15 @@ const EditorImage = (
     setCurrentMeme({ url: url });
   };
   return currentMeme ? (
-    <ImgBox color={color} ref={ref}>
+    <ImgBox ref={ref}>
       <Img src={currentMeme!.url} alt='meme' draggable='false' />
-      <ImageText text={text} textBoundary={textBoundary} />
+      {inputs.map((input, i) => (
+        <ImageText
+          key={`imgText-${i}`}
+          text={text[i]}
+          textBoundary={textBoundary}
+        />
+      ))}
     </ImgBox>
   ) : (
     <NoImage
@@ -77,7 +83,7 @@ const EditorImage = (
 
 export default forwardRef(EditorImage);
 
-const ImgBox = styled.div<{ color: string }>`
+const ImgBox = styled.div`
   position: relative;
   flex-shrink: 0;
   width: 40%;
@@ -103,7 +109,7 @@ const NoImage = styled.div`
   justify-content: center;
   flex-shrink: 0;
   width: 40%;
-  height: 100%;
+  height: 40rem;
   border: 1px solid #eaeaea;
   border-radius: 5px;
   margin-right: 1rem;

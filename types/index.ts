@@ -11,13 +11,13 @@ export type LOCAL_MEME = {
   url: string;
 };
 
-export type TEXT_TYPE = {
-  top: string;
-  middle: string;
-  bottom: string;
-};
+export interface TEXT_TYPE {
+  [key: number]: { text: string; color: string };
+}
 
 export interface TEXT_BOUNDARY {
   right: number;
   bottom: number;
 }
+
+export type INPUT_TYPE = number[];

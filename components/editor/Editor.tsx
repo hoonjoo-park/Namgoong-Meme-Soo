@@ -6,7 +6,7 @@ import EditorImage from './EditorImage';
 import EditorMemeList from './EditorMemeList';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
-import { DEVICE } from 'constants/';
+import { DEFAULT_TEXT, DEVICE, INPUTS } from 'constants/';
 
 interface Props {
   apiData: API_DATA[];
@@ -15,17 +15,13 @@ interface Props {
 }
 
 function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
-  const [text, setText] = useState<TEXT_TYPE>({
-    top: '',
-    middle: '',
-    bottom: '',
-  });
-  const [color, setColor] = useState<string>('#000000');
   const [textBoundary, setTextBoundary] = useState<TEXT_BOUNDARY | null>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-
+  const [text, setText] = useState<TEXT_TYPE>(DEFAULT_TEXT);
+  const [inputs, setInputs] = useState<number[]>(INPUTS);
+  console.log(text);
   useEffect(() => {
-    setText({ top: '', middle: '', bottom: '' });
+    setText(DEFAULT_TEXT);
     if (currentMeme) {
       const image = imageRef.current;
       const rightBoundary = image!.offsetWidth;
@@ -60,9 +56,9 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
         currentMeme={currentMeme}
         setCurrentMeme={setCurrentMeme}
         text={text}
-        color={color}
         ref={imageRef}
         textBoundary={textBoundary}
+        inputs={inputs}
       />
       <RightBox>
         <EditorMemeList
@@ -74,9 +70,9 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
           currentMeme={currentMeme}
           text={text}
           setText={setText}
-          color={color}
-          setColor={setColor}
           saveImage={saveImage}
+          inputs={inputs}
+          setInputs={setInputs}
         />
       </RightBox>
     </EditorBox>
@@ -87,13 +83,14 @@ export default Editor;
 
 const EditorBox = styled.div`
   display: flex;
-  height: 40rem;
+  max-height: 650px;
+  height: 70vh;
   max-width: 1200px;
   width: 70vw;
   padding: 1.5em;
   border-radius: 5px;
   box-shadow: 0px 3px 14px -1px rgba(0, 0, 0, 0.75);
-  overflow: hidden;
+  overflow: scroll;
   @media ${DEVICE.TABLET} {
     width: 100vw;
   }
