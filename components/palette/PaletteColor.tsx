@@ -59,7 +59,7 @@ const ColorItem = styled.li<StyleProps>`
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   @media ${DEVICE.PHONE} {
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 `;

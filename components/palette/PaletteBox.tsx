@@ -48,4 +48,11 @@ const ColorBox = styled.ul`
   &.open {
     max-width: ${COLOR_PALETTE.length * 2.5}rem;
   }
+  @media ${DEVICE.PHONE} {
+    max-width: calc(1.5rem + 2px);
+    max-height: 1.5rem;
+    &.open {
+      max-width: ${COLOR_PALETTE.length * 2}rem;
+    }
+  }
 `;

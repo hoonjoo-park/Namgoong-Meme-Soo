@@ -19,7 +19,6 @@ function Editor({ apiData, currentMeme, setCurrentMeme }: Props) {
   const imageRef = useRef<HTMLDivElement>(null);
   const [text, setText] = useState<TEXT_TYPE>(DEFAULT_TEXT);
   const [inputs, setInputs] = useState<number[]>(INPUTS);
-  console.log(text);
   useEffect(() => {
     setText(DEFAULT_TEXT);
     if (currentMeme) {

@@ -120,6 +120,9 @@ const Form = styled.form`
   padding: 2em;
   border: 1px solid #eaeaea;
   border-radius: 5px;
+  @media ${DEVICE.PHONE} {
+    padding: 1.5em 0.5em;
+  }
 `;
 
 const AddButton = styled.button`

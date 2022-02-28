@@ -103,6 +103,9 @@ const InputBox = styled.div`
   position: relative;
   margin-bottom: 1rem;
   width: 100%;
+  @media ${DEVICE.PHONE} {
+    margin-bottom: 1rem;
+  }
 `;
 
 const MemeInput = styled.input`
@@ -115,7 +118,6 @@ const MemeInput = styled.input`
   border: 1px solid #eaeaea;
   @media ${DEVICE.PHONE} {
     height: 2.5rem;
-    margin-bottom: 1rem;
     font-size: 1rem;
   }
 `;
@@ -147,5 +149,9 @@ const DeleteButton = styled.button`
   svg {
     font-size: 1.2rem;
     color: ${COLOR.red};
+  }
+  @media ${DEVICE.PHONE} {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 `;
