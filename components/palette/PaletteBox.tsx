@@ -1,5 +1,5 @@
 import { COLOR, COLOR_PALETTE, DEVICE } from 'constants/';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { PaletteColor } from './PaletteColor';
 import { TEXT_TYPE } from 'types';
@@ -17,6 +17,11 @@ export const PaletteBox = ({ color, setColor, handleColor, index }: Props) => {
   const handleOpen = () => {
     setIsOpen((prev) => !prev);
   };
+  useEffect(() => {
+    const filteredPalettes = palettes.filter((col) => col !== color);
+    const newPalettes = [color, ...filteredPalettes];
+    setPalettes(newPalettes);
+  }, [color]);
   return (
     <ColorBox className={isOpen ? 'open' : ''} onClick={handleOpen}>
       {palettes.map((col, i) => (

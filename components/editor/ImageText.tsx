@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { TEXT_BOUNDARY } from 'types';
 import { COLOR } from 'constants/';
+import { css } from '@emotion/react';
 
 interface Props {
   text: { text: string; color: string };
@@ -40,11 +41,15 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     setStartLeft(e.currentTarget.offsetLeft);
   };
 
-  const handleMouseUp = () => {
+  const handleStopMoving = () => {
     setIsDown(false);
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener('mouseup', handleStopMoving);
+    window.removeEventListener('touchend', handleStopMoving);
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!isDown || isResizing) return;
     e.preventDefault();
     e.stopPropagation();
@@ -52,9 +57,10 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     const toMoveLeft = e.pageX - startX + startLeft;
     const moveOptions =
       toMoveTop + 10 <= 0 ||
-      toMoveTop + e.currentTarget.offsetHeight - 10 >= textBoundary!.bottom ||
-      toMoveLeft - e.currentTarget.offsetWidth / 2 + 10 <= 0 ||
-      toMoveLeft + e.currentTarget.offsetWidth / 2 - 10 >= textBoundary!.right;
+      toMoveTop + inputRef.current!.offsetHeight - 10 >= textBoundary!.bottom ||
+      toMoveLeft - inputRef.current!.offsetWidth / 2 + 10 <= 0 ||
+      toMoveLeft + inputRef.current!.offsetWidth / 2 - 10 >=
+        textBoundary!.right;
     if (moveOptions) return;
     textMover(toMoveTop, toMoveLeft);
   };
@@ -68,16 +74,17 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     setStartLeft(e.currentTarget.offsetLeft);
   };
 
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+  const handleTouchMove = (e: TouchEvent) => {
     if (!isDown || isResizing) return;
+    e.preventDefault();
     e.stopPropagation();
     const toMoveTop = e.changedTouches[0].pageY - startY + startTop;
     const toMoveLeft = e.changedTouches[0].pageX - startX + startLeft;
     const moveOptions =
       toMoveTop + 10 <= 0 ||
-      toMoveTop + e.currentTarget.offsetHeight - 10 >= textBoundary!.bottom ||
-      toMoveLeft - e.currentTarget.offsetWidth / 2 + 10 <= 0 ||
-      toMoveLeft + e.currentTarget.offsetWidth / 2 - 10 >= textBoundary!.right;
+      toMoveTop + inputRef.current!.offsetHeight >= textBoundary!.bottom ||
+      toMoveLeft - inputRef.current!.offsetWidth / 2 <= 0 ||
+      toMoveLeft + inputRef.current!.offsetWidth / 2 >= textBoundary!.right;
     if (moveOptions) return;
     textMover(toMoveTop, toMoveLeft);
   };
@@ -159,27 +166,33 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
 
   const stopResizing = () => {
     setIsResizing(false);
-    document.removeEventListener('mousemove', mouseResizing);
-    document.removeEventListener('mouseup', stopResizing);
+    window.removeEventListener('mousemove', mouseResizing);
+    window.removeEventListener('mouseup', stopResizing);
+    window.removeEventListener('touchmove', touchResizing);
+    window.removeEventListener('touchend', stopResizing);
   };
 
   useEffect(() => {
     if (!resizer || !isResizing) return;
-    document.addEventListener('mousemove', mouseResizing);
-    document.addEventListener('mouseup', stopResizing);
-    document.addEventListener('touchmove', touchResizing);
-    document.addEventListener('touchend', stopResizing);
+    window.addEventListener('mousemove', mouseResizing);
+    window.addEventListener('mouseup', stopResizing);
+    window.addEventListener('touchmove', touchResizing);
+    window.addEventListener('touchend', stopResizing);
   }, [resizer, isResizing]);
+
+  useEffect(() => {
+    if (isResizing) return;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleStopMoving);
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchend', handleStopMoving);
+  }, [isDown, isResizing]);
   return (
     <>
       <Text
+        className={isResizing ? 'active' : ''}
         onMouseDown={(e) => handleMouseDown(e)}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onMouseMove={(e) => handleMouseMove(e)}
-        onTouchMove={(e) => handleTouchMove(e)}
         onTouchStart={(e) => handleTouchStart(e)}
-        onTouchEnd={handleMouseUp}
         ref={inputRef}
         color={text['color']}
         index={index}
@@ -226,11 +239,23 @@ const Text = styled.div<StyleProps>`
   color: ${(props) => props.color};
   cursor: move;
   text-align: center;
-  border: 1px dashed ${COLOR.blue};
+  &:hover {
+    border: 1px dashed ${COLOR.blue};
+    & .resizer {
+      display: block;
+    }
+  }
+  &.active {
+    border: 1px dashed ${COLOR.blue};
+    & .resizer {
+      display: block;
+    }
+  }
 `;
 
 const Resizer = styled.span`
   position: absolute;
+  display: none;
   width: 8px;
   height: 8px;
   background-color: ${COLOR.blue};

@@ -1,11 +1,4 @@
-import React, {
-  ChangeEvent,
-  Dispatch,
-  KeyboardEvent,
-  SetStateAction,
-  useRef,
-  useState,
-} from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { COLOR, DEVICE } from 'constants/';
 import { API_DATA, LOCAL_MEME, TEXT_TYPE } from 'types';
@@ -76,7 +69,6 @@ export const EditorInput = ({
   };
   const handleDelete = () => {
     const lastIndex = inputs.length - 1;
-    // 끝의 인풋을 삭제한 것이 아니라면?
     const newInputs = inputs.filter((input, i) => i !== index);
     setInputs(newInputs);
     if (index < inputs.length - 1) {
@@ -84,7 +76,7 @@ export const EditorInput = ({
       for (let i = index; i < inputs.length - 1; i++) {
         newText = {
           ...newText,
-          [i]: { text: newText[i + 1]['text'], color: newText[i + 1]['text'] },
+          [i]: { text: newText[i + 1]['text'], color: newText[i + 1]['color'] },
         };
       }
       newText = {
@@ -96,6 +88,9 @@ export const EditorInput = ({
     }
     handleInput('', lastIndex);
   };
+  useEffect(() => {
+    setColor(text[index]['color']);
+  }, [index, text]);
   return (
     <InputBox>
       <MemeInput
