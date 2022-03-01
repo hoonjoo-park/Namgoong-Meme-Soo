@@ -55,6 +55,7 @@ const EditorImage = (
       {inputs.map((input, i) => (
         <ImageText
           key={`imgText-${i}`}
+          index={i}
           text={text[i]}
           textBoundary={textBoundary}
         />
