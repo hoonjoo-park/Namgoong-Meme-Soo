@@ -8,9 +8,11 @@
 
 ---
 
-## 배포 주소
+## 주소 링크
 
-### [https://namgoong-meme-soo.vercel.app/](https://namgoong-meme-soo.vercel.app/)
+### [배포 주소](https://namgoong-meme-soo.vercel.app/)
+
+### [블로그 포스팅 주소](https://hoonjoo-park.github.io/projects/presonal/namgoongmemesoo/)
 
 ---
 
