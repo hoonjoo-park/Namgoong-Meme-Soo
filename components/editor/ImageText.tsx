@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { TEXT_BOUNDARY } from 'types';
 import { COLOR } from 'constants/';
-import { css } from '@emotion/react';
 
 interface Props {
   text: { text: string; color: string };
@@ -13,7 +12,6 @@ interface Props {
 interface StyleProps {
   index: number;
   color: string;
-  fontSize: number;
 }
 
 export const ImageText = ({ text, textBoundary, index }: Props) => {
@@ -28,7 +26,6 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
   const [resizer, setResizer] = useState<string | null>(null);
   const [startWidth, setStartWidth] = useState(0);
   const [startHeight, setStartHeight] = useState(0);
-  const [fontSize, setFontSize] = useState(32);
   const inputRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
@@ -132,10 +129,11 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
   };
 
   const handleFontSize = () => {
-    const fontSize =
-      inputRef.current!.offsetWidth * inputRef.current!.offsetHeight * 0.005;
-    if (fontSize < 80) {
-      setFontSize(fontSize);
+    const boxSize =
+      inputRef.current!.offsetWidth * inputRef.current!.offsetHeight;
+    const fontSize = boxSize * 0.003;
+    if (fontSize < 60) {
+      inputRef.current!.style.fontSize = `${fontSize}px`;
     }
   };
 
@@ -144,10 +142,12 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
       case 'leftTop':
         inputRef.current!.style.width = `${startWidth + movedX}px`;
         inputRef.current!.style.height = `${startHeight + movedY}px`;
+        inputRef.current!.style.top = `${startTop - movedY}px`;
         break;
       case 'rightTop':
         inputRef.current!.style.width = `${startWidth - movedX}px`;
         inputRef.current!.style.height = `${startHeight + movedY}px`;
+        inputRef.current!.style.top = `${startTop - movedY}px`;
         break;
       case 'rightBottom':
         inputRef.current!.style.width = `${startWidth - movedX}px`;
@@ -194,7 +194,6 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
         ref={inputRef}
         color={text['color']}
         index={index}
-        fontSize={fontSize}
       >
         {text['text']}
         <Resizer
@@ -229,7 +228,7 @@ const Text = styled.div<StyleProps>`
   top: ${(props) => `calc(11% * ${props.index + 1})`};
   left: 50%;
   transform: translateX(-50%);
-  font-size: ${(props) => `${props.fontSize}px`};
+  font-size: 32px;
   font-weight: 900;
   white-space: nowrap;
   text-shadow: 2px 2px 3px rgba(150, 150, 150, 1);
