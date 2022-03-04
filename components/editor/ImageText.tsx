@@ -121,7 +121,6 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     const movedX = resizeStartX - e.clientX;
     const movedY = resizeStartY - e.clientY;
     handleFontSize();
-    if (movedX === 0) return;
     handleResize(movedX, movedY);
   };
 
@@ -129,7 +128,6 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     const movedX = resizeStartX - e.changedTouches[0].clientX;
     const movedY = resizeStartY - e.changedTouches[0].clientY;
     handleFontSize();
-    if (movedX === 0) return;
     handleResize(movedX, movedY);
   };
 
@@ -226,6 +224,7 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
 
 const Text = styled.div<StyleProps>`
   position: absolute;
+  max-width: 470px;
   width: fit-content;
   top: ${(props) => `calc(11% * ${props.index + 1})`};
   left: 50%;
