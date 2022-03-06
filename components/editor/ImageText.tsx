@@ -118,12 +118,32 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     handleResize(movedX, movedY);
   };
 
+  const checkIsOverflowed = () => {
+    const isOverflowedX =
+      inputRef.current!.offsetWidth + 2 < inputRef.current!.scrollWidth;
+    const isOverflowedY =
+      inputRef.current!.offsetHeight + 3 < inputRef.current!.scrollHeight;
+    return isOverflowedX || isOverflowedY;
+  };
+
+  useEffect(() => {
+    handleFontSize();
+  }, [text['text']]);
+
   const handleFontSize = () => {
-    const boxSize =
-      inputRef.current!.offsetWidth * inputRef.current!.offsetHeight;
-    const fontSize = boxSize * 0.005;
-    if (fontSize < 60) {
-      inputRef.current!.style.fontSize = `${fontSize}px`;
+    const inputStyle = getComputedStyle(inputRef.current!);
+    if (checkIsOverflowed()) {
+      while (true) {
+        const fontSize = parseFloat(inputStyle.fontSize);
+        if (!checkIsOverflowed() || fontSize <= 10) break;
+        inputRef.current!.style.fontSize = `${fontSize - 0.1}px`;
+      }
+      return;
+    }
+    while (true) {
+      const fontSize = parseFloat(inputStyle.fontSize);
+      if (checkIsOverflowed() || fontSize >= 60) break;
+      inputRef.current!.style.fontSize = `${fontSize + 0.1}px`;
     }
   };
 
@@ -214,7 +234,7 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
 const Text = styled.div<StyleProps>`
   position: absolute;
   max-width: 470px;
-  width: fit-content;
+  width: 60%;
   top: ${(props) => `calc(11% * ${props.index + 1})`};
   left: 50%;
   transform: translateX(-50%);
