@@ -21,62 +21,44 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
   const [startLeft, setStartLeft] = useState(0);
   const [isDown, setIsDown] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [resizeStartX, setResizeStartX] = useState(0);
-  const [resizeStartY, setResizeStartY] = useState(0);
   const [resizer, setResizer] = useState<string | null>(null);
   const [startWidth, setStartWidth] = useState(0);
   const [startHeight, setStartHeight] = useState(0);
   const inputRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+  const handleMoveStart = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+  ) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDown(true);
-    setStartX(e.pageX);
-    setStartY(e.pageY);
+    const event = e.nativeEvent;
+    if (event instanceof MouseEvent) {
+      setStartX(event.pageX);
+      setStartY(event.pageY);
+    }
+    if (event instanceof TouchEvent) {
+      setStartX(event.changedTouches[0].pageX);
+      setStartY(event.changedTouches[0].pageY);
+    }
     setStartTop(e.currentTarget.offsetTop);
     setStartLeft(e.currentTarget.offsetLeft);
   };
 
-  const handleStopMoving = () => {
-    setIsDown(false);
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('touchmove', handleTouchMove);
-    window.removeEventListener('mouseup', handleStopMoving);
-    window.removeEventListener('touchend', handleStopMoving);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
+  const calcMoveValue = (e: MouseEvent | TouchEvent) => {
     if (!isDown || isResizing) return;
     e.preventDefault();
     e.stopPropagation();
-    const toMoveTop = e.pageY - startY + startTop;
-    const toMoveLeft = e.pageX - startX + startLeft;
-    const moveOptions =
-      toMoveTop + 10 <= 0 ||
-      toMoveTop + inputRef.current!.offsetHeight - 10 >= textBoundary!.bottom ||
-      toMoveLeft - inputRef.current!.offsetWidth / 2 + 10 <= 0 ||
-      toMoveLeft + inputRef.current!.offsetWidth / 2 - 10 >=
-        textBoundary!.right;
-    if (moveOptions) return;
-    textMover(toMoveTop, toMoveLeft);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    setIsDown(true);
-    setStartX(e.changedTouches[0].pageX);
-    setStartY(e.changedTouches[0].pageY);
-    setStartTop(e.currentTarget.offsetTop);
-    setStartLeft(e.currentTarget.offsetLeft);
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!isDown || isResizing) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const toMoveTop = e.changedTouches[0].pageY - startY + startTop;
-    const toMoveLeft = e.changedTouches[0].pageX - startX + startLeft;
+    let toMoveTop = 0;
+    let toMoveLeft = 0;
+    if (e instanceof MouseEvent) {
+      toMoveTop = e.pageY - startY + startTop;
+      toMoveLeft = e.pageX - startX + startLeft;
+    }
+    if (e instanceof TouchEvent) {
+      toMoveTop = e.changedTouches[0].pageY - startY + startTop;
+      toMoveLeft = e.changedTouches[0].pageX - startX + startLeft;
+    }
     const moveOptions =
       toMoveTop + 10 <= 0 ||
       toMoveTop + inputRef.current!.offsetHeight >= textBoundary!.bottom ||
@@ -92,11 +74,28 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     return;
   };
 
-  const resizeStart = (e: React.MouseEvent, type: string) => {
+  const handleStopMoving = () => {
+    setIsDown(false);
+    window.removeEventListener('mousemove', calcMoveValue);
+    window.removeEventListener('touchmove', calcMoveValue);
+    window.removeEventListener('mouseup', handleStopMoving);
+    window.removeEventListener('touchend', handleStopMoving);
+  };
+
+  const handleResizeStart = (
+    e: React.MouseEvent<HTMLSpanElement> | React.TouchEvent<HTMLSpanElement>,
+    type: string
+  ) => {
     setResizer(type);
     setIsResizing(true);
-    setResizeStartX(e.clientX);
-    setResizeStartY(e.clientY);
+    if (e instanceof MouseEvent) {
+      setStartX(e.pageX);
+      setStartY(e.pageY);
+    }
+    if (e instanceof TouchEvent) {
+      setStartX(e.changedTouches[0].pageX);
+      setStartY(e.changedTouches[0].pageY);
+    }
     const inputStyle = getComputedStyle(inputRef.current!);
     const inputWidth = parseFloat(inputStyle.width);
     const inputHeight = parseFloat(inputStyle.height);
@@ -104,26 +103,17 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
     setStartHeight(inputHeight);
   };
 
-  const touchResizeStart = (e: React.TouchEvent, type: string) => {
-    setResizer(type);
-    setIsResizing(true);
-    setResizeStartX(e.changedTouches[0].clientX);
-    setResizeStartY(e.changedTouches[0].clientY);
-    const inputStyle = getComputedStyle(inputRef.current!);
-    setStartWidth(parseFloat(inputStyle.width));
-    setStartHeight(parseFloat(inputStyle.height));
-  };
-
-  const mouseResizing = (e: MouseEvent) => {
-    const movedX = resizeStartX - e.clientX;
-    const movedY = resizeStartY - e.clientY;
-    handleFontSize();
-    handleResize(movedX, movedY);
-  };
-
-  const touchResizing = (e: TouchEvent) => {
-    const movedX = resizeStartX - e.changedTouches[0].clientX;
-    const movedY = resizeStartY - e.changedTouches[0].clientY;
+  const calcResizeValue = (e: MouseEvent | TouchEvent) => {
+    let movedX = 0;
+    let movedY = 0;
+    if (e instanceof MouseEvent) {
+      movedX = startX - e.pageX;
+      movedY = startY - e.pageY;
+    }
+    if (e instanceof TouchEvent) {
+      movedX = startX - e.changedTouches[0].pageX;
+      movedY = startY - e.changedTouches[0].pageY;
+    }
     handleFontSize();
     handleResize(movedX, movedY);
   };
@@ -131,7 +121,7 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
   const handleFontSize = () => {
     const boxSize =
       inputRef.current!.offsetWidth * inputRef.current!.offsetHeight;
-    const fontSize = boxSize * 0.003;
+    const fontSize = boxSize * 0.005;
     if (fontSize < 60) {
       inputRef.current!.style.fontSize = `${fontSize}px`;
     }
@@ -164,33 +154,33 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
 
   const stopResizing = () => {
     setIsResizing(false);
-    window.removeEventListener('mousemove', mouseResizing);
+    window.removeEventListener('mousemove', calcResizeValue);
     window.removeEventListener('mouseup', stopResizing);
-    window.removeEventListener('touchmove', touchResizing);
+    window.removeEventListener('touchmove', calcResizeValue);
     window.removeEventListener('touchend', stopResizing);
   };
 
   useEffect(() => {
     if (!resizer || !isResizing) return;
-    window.addEventListener('mousemove', mouseResizing);
+    window.addEventListener('mousemove', calcResizeValue);
     window.addEventListener('mouseup', stopResizing);
-    window.addEventListener('touchmove', touchResizing);
+    window.addEventListener('touchmove', calcResizeValue);
     window.addEventListener('touchend', stopResizing);
   }, [resizer, isResizing]);
 
   useEffect(() => {
-    if (isResizing) return;
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', calcMoveValue);
     window.addEventListener('mouseup', handleStopMoving);
-    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchmove', calcMoveValue);
     window.addEventListener('touchend', handleStopMoving);
-  }, [isDown, isResizing]);
+  }, [isDown]);
+
   return (
     <>
       <Text
         className={isResizing ? 'active' : ''}
-        onMouseDown={(e) => handleMouseDown(e)}
-        onTouchStart={(e) => handleTouchStart(e)}
+        onMouseDown={(e) => handleMoveStart(e)}
+        onTouchStart={(e) => handleMoveStart(e)}
         ref={inputRef}
         color={text['color']}
         index={index}
@@ -198,23 +188,23 @@ export const ImageText = ({ text, textBoundary, index }: Props) => {
         {text['text']}
         <Resizer
           className='resizer leftTop'
-          onMouseDown={(e) => resizeStart(e, 'leftTop')}
-          onTouchStart={(e) => touchResizeStart(e, 'leftTop')}
+          onMouseDown={(e) => handleResizeStart(e, 'leftTop')}
+          onTouchStart={(e) => handleResizeStart(e, 'leftTop')}
         ></Resizer>
         <Resizer
           className='resizer rightTop'
-          onMouseDown={(e) => resizeStart(e, 'rightTop')}
-          onTouchStart={(e) => touchResizeStart(e, 'rightTop')}
+          onMouseDown={(e) => handleResizeStart(e, 'rightTop')}
+          onTouchStart={(e) => handleResizeStart(e, 'rightTop')}
         ></Resizer>
         <Resizer
           className='resizer rightBottom'
-          onMouseDown={(e) => resizeStart(e, 'rightBottom')}
-          onTouchStart={(e) => touchResizeStart(e, 'rightBottom')}
+          onMouseDown={(e) => handleResizeStart(e, 'rightBottom')}
+          onTouchStart={(e) => handleResizeStart(e, 'rightBottom')}
         ></Resizer>
         <Resizer
           className='resizer leftBottom'
-          onMouseDown={(e) => resizeStart(e, 'leftBottom')}
-          onTouchStart={(e) => touchResizeStart(e, 'leftBottom')}
+          onMouseDown={(e) => handleResizeStart(e, 'leftBottom')}
+          onTouchStart={(e) => handleResizeStart(e, 'leftBottom')}
         ></Resizer>
       </Text>
     </>
